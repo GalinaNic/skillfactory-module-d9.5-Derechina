@@ -1,0 +1,51 @@
+
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+{% if posts %}
+    <h2>Количество постов: {{ posts|length }}</h2>
+<table width="100%" style="margin-top:35px">
+    <tr>
+        <td><u>Категория</u></td>
+        <td><u>Заголовок</u></td>
+        <td><u>Содержание</u></td>
+        <td><u>Дата публикации</u></td>
+        <td><u>Тип публикации</u></td>
+    </tr>
+    {% for post in posts %}
+    <tr>
+        <td>
+            {% for category in post.category.all %}
+                <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+            {% endfor %}
+        </td>
+        <td>{{ post.title }}</td>
+        <td>{{ post.text|truncatewords:20|censor }}</td>
+        <td>{{ post.post_time|date:'d M Y' }}</td>
+        <td>{{ post.get_post_type_display }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h3>Публикаций нет!</h3>
+{% endif %}
+{% if page_obj.has_previous %}
+    <a href="?page=1">1</a>
+    {% if page_obj.previous_page_number != 1 %}
+        ...
+        <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+{% endif %}
+{{ page_obj.number }}
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+{% endif %}
+
+
+{% endblock content %}

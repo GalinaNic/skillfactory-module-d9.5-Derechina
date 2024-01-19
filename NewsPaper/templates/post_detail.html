@@ -1,0 +1,24 @@
+
+{% extends "default.html" %}
+
+{% load custom_filters %}
+
+
+{% block content %}
+{% if post %}
+<table>
+    <tr>
+        <td>Заголовок</td>
+        <td>Содержание</td>
+        <td>Дата публикации</td>
+    </tr>
+    <tr>
+        <td>{{ post.title }}</td>
+        <td>{{ post.text|censor }}</td>
+        <td>{{ post.post_time|date:'d M Y' }}</td>
+    </tr>
+</table>
+{% else %}
+<h3>Публикаций нет!</h3>
+{% endif %}
+{% endblock content %}
